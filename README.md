@@ -5,7 +5,7 @@ Parallel with OpenMP
 ### Part 2 includes a matrix matrix multiplication algorithm with OpenMP
 
 ## Introduction:
-This project mainly focuses on parallelization using Openmp in C++. Openmp is a very convenient and very user-friendly paralleling tool compared to std::thread. The goal here is to use Openmp, instead of the Thread library, to solve the same two tasks of homework 3.
+This project mainly focuses on parallelization using Openmp in C++. Openmp is a very convenient and very user-friendly paralleling tool compared to std::thread. The goal here is to use Openmp, instead of the Thread library, to solve the same two tasks of the Thread project.
 
 ## System Model:
 Every task is run on the RHEL7 interactive desktop. Unless specified, the core number is set to 20 by default for each test run. L1, L2, and L3 cache sizes are 32KB, 256KB, 30720KB respectively. Memory size is set separately to 1GB in the pbs file. 
@@ -24,7 +24,7 @@ OpenMP is also friendly to programmers who need to understand and maintain other
 Non-associativity of floating-point calculation
 When calculating two floating-point numbers A and B, we don’t always get the same result. For example,  and  don’t give the same result as expected from regular arithmetic principles. If we look into the two results, the difference often doesn’t show up until after many digits after the decimal point. This means the two results effectively have the same value. However, because binary encoding for floating-point numbers is so different from decimal representation, the computer will always recognize them as two different numbers. This requires us to implement a comparison function for floating-points, so that within a certain range of error, ε, the function will give a positive answer. We implemented such a function in main.cpp.
 Paralleling 
-Part 1 has 3 subroutines, that is,  finding mean, finding sum, finding top values. We parallel the code base on the original serial code by adding OpenMP directives directly. Unlike homework 3, we don’t need to address the issue when N is not a multiple of P, because OpenMP automatically deals with it. 
+Part 1 has 3 subroutines, that is,  finding mean, finding sum, finding top values. We parallel the code base on the original serial code by adding OpenMP directives directly. Unlike the Thread project, we don’t need to address the issue when N is not a multiple of P, because OpenMP automatically deals with it. 
 OpenMP and Thread
 
 
@@ -33,7 +33,7 @@ OpenMP and Thread
 
 
 Table 1: The execution time when P is 20, and N is set to accommodate L1 and L2 cache
-But all the automatization came with a cost. When data size is relatively small, namely, in the range of L1 cache and L2 cache, the execution time of OpenMP is much longer than the execution time of serial code. Recall that from homework 3, the execution time for threaded part 1 and part 2 are 0.001580 and 0.001195. The result from Table 1 shows that the OpenMP execution time for part 1 is about 10 times longer than part 1 from homework 3; part 2 is about 5 times longer than part 2 from homework 3.
+But all the automatization came with a cost. When data size is relatively small, namely, in the range of L1 cache and L2 cache, the execution time of OpenMP is much longer than the execution time of serial code. Recall that from the Thread project, the execution time for threaded part 1 and part 2 are 0.001580 and 0.001195. The result from Table 1 shows that the OpenMP execution time for part 1 is about 10 times longer than part 1 from the Thread project; part 2 is about 5 times longer than part 2 from the Thread project.
 
 This shows that, although OpenMP has all the advantages over the Thread library, when data size is small and threading overhead doesn’t outweigh memory latency, OpenMP has a big disadvantage in terms of performance compared to the Thread library. This makes sense, because the inventors of OpenMP would need to make sure their module works in different environments and situations, and behind the scene, there must be a lot of extra effort to ensure that. 
 Scalability 
@@ -41,7 +41,7 @@ Let’s see whether OpenMP gets worse by testing part 1 again with 4 threads. Th
 Figure 1: The execution time when P is 4. 
 We can see that when data size is small, OpenMP spends so much time on parallelization, and execution time of serial code is only a small fraction of it.
 
-Let’s also run other tests with different P and N. From homework 3, we learned that having 20 threads with our 20 cores system should result in the best performance. However, that is not the case with OpenMP. Observing from Figure 2, we find that, with OpenMP, a smaller number of threads actually results in better performance. What is more interesting is that, when P is 20 and above, the data size doesn’t even affect the performance so much. In fact, their execution time stays on the same level. 
+Let’s also run other tests with different P and N. From the Thread project, we learned that having 20 threads with our 20 cores system should result in the best performance. However, that is not the case with OpenMP. Observing from Figure 2, we find that, with OpenMP, a smaller number of threads actually results in better performance. What is more interesting is that, when P is 20 and above, the data size doesn’t even affect the performance so much. In fact, their execution time stays on the same level. 
 
 Figure 2: The execution time with different P and N
 So, after running more tests and observing from the results, my conclusion is, unlike the Thread library, the Openmp module doesn’t have the best performance when the number of threads is the same as the number of cores. Instead, when P and N are at their middle ground, that is, they are both not too relatively small and relatively large, OpenMP gives the best performance. We will use this phenomenon on task 2 below.  
