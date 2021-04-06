@@ -1,11 +1,3 @@
-/**
- * CMPCS-450 Assignment 3
- * main.cpp
- * Warning: Do not change anything in this file
- * 
- * @author Niranjan Thirusangu, William Seisler
- * @version 1.2 02/18/2020
-*/
 
 #include <iostream>
 #include <sys/time.h>
